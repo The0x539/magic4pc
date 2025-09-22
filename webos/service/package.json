@@ -1,6 +1,6 @@
 {
   "name": "me.wouterdek.magic4pc.service",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Magic4PC service",
   "main": "m4p_service.js",
   "scripts": {
