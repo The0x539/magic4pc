@@ -64,12 +64,6 @@ function details(err, stats, output) {
 		if (!err.message) return err;
 		let msg = err.message;
 
-		// Add additional information for postcss errors
-		if (Object.prototype.hasOwnProperty.call(err, 'postcssNode')) {
-			msg +=
-				'\nCompileError: Begins at CSS selector ' + err['postcssNode'].selector;
-		}
-
 		// Generate pretty/formatted warnins/errors
 		messages = formatWebpackMessages({
 			errors: [msg],

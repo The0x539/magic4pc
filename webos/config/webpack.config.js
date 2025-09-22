@@ -75,7 +75,6 @@ module.exports = function (env) {
 	const getStyleLoaders = (cssLoaderOptions = {}, preProcessor) => {
 		// Multiple styling-support features are used together, bottom-to-top.
 		// An optonal preprocessor, like "less loader", compiles LESS syntax into CSS.
-		// "postcss" loader applies autoprefixer to our CSS.
 		// "css" loader resolves paths in CSS and adds assets as dependencies.
 		// `MiniCssExtractPlugin` takes the resulting CSS and puts it into an
 		// external file in our build process. If you use code splitting, any async
@@ -106,41 +105,6 @@ module.exports = function (env) {
 						}
 					}
 				),
-			},
-			{
-				// Options for PostCSS as we reference these options twice
-				// Adds vendor prefixing based on your specified browser support in
-				// package.json
-				loader: require.resolve('postcss-loader'),
-				options: {
-					postcssOptions: {
-						plugins: [
-							// Fix and adjust for known flexbox issues
-							// See https://github.com/philipwalton/flexbugs
-							require('postcss-flexbugs-fixes'),
-							// Support @global-import syntax to import css in a global context.
-							require('postcss-global-import'),
-							// Transpile stage-3 CSS standards based on browserslist targets.
-							// See https://preset-env.cssdb.org/features for supported features.
-							// Includes support for targetted auto-prefixing.
-							require('postcss-preset-env')({
-								autoprefixer: {
-									flexbox: 'no-2009',
-									remove: false,
-								},
-								stage: 3,
-								features: {'custom-properties': false},
-							}),
-							// Adds PostCSS Normalize to standardize browser quirks based on
-							// the browserslist targets.
-							require('postcss-normalize')(),
-							// Resolution indepedence support
-							app.ri !== false &&
-								require('postcss-resolution-independence')(app.ri),
-						].filter(Boolean),
-					},
-					sourceMap: shouldUseSourceMap,
-				},
 			},
 		];
 		if (preProcessor) {
@@ -369,30 +333,10 @@ module.exports = function (env) {
 							ascii_only: true,
 						},
 						sourceMap: shouldUseSourceMap,
-						// Enable file caching
-						nameCache: true,
 					},
 					// Use multi-process parallel running to improve the build speed
 					// Default number of concurrent runs: os.cpus().length - 1
 					parallel: true,
-				}),
-				new CSSMinimizerWebpackPlugin({
-					minimizerOptions: {
-						processorOptions: {
-							// TODO: verify calc issue fixed. Related: https://github.com/postcss/postcss-calc/issues/50
-							// calc: false,
-							parser: require('postcss-safe-parser'),
-							map: shouldUseSourceMap && {
-								// `inline: false` forces the sourcemap to be output into a
-								// separate file
-								inline: false,
-								// `annotation: true` appends the sourceMappingURL to the end of
-								// the css file, helping the browser find the sourcemap
-								annotation: true,
-							},
-						},
-						preset: ['default', {minifyFontValues: {removeQuotes: false}}],
-					},
 				}),
 			],
 		},
