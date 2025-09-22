@@ -94,14 +94,16 @@ module.exports = function (env) {
 					cssLoaderOptions,
 					cssLoaderOptions.modules && {modules: {getLocalIdent}},
 					{
-						url: (url) => {
-							// Don't handle absolute path urls
-							if (url.startsWith('/')) {
-								return false;
-							}
+						url: {
+							filter: (url) => {
+								// Don't handle absolute path urls
+								if (url.startsWith('/')) {
+									return false;
+								}
 
-							return true;
-						},
+								return true;
+							},
+						}
 					}
 				),
 			},
