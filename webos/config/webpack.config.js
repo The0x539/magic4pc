@@ -7,7 +7,7 @@ const ESLintPlugin = require('eslint-webpack-plugin');
 const ForkTsCheckerWebpackPlugin = require('react-dev-utils/ForkTsCheckerWebpackPlugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
+const CSSMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
@@ -206,10 +206,8 @@ module.exports = function (env) {
 					return file;
 				}
 			},
-			// Use webpack 5 handling of asset files; remove once upgraded to webpack 5
-			futureEmitAssets: true,
 			// Prevent potential conflicts in muliple runtimes
-			jsonpFunction: 'webpackJsonp' + app.name,
+			chunkLoadingGlobal: 'webpackJsonp' + app.name,
 			// Allow versatile 'global' mapping across multiple deploy formats
 			globalObject: 'this',
 		},
@@ -378,21 +376,21 @@ module.exports = function (env) {
 					cache: true,
 					sourceMap: shouldUseSourceMap,
 				}),
-				new OptimizeCSSAssetsPlugin({
-					cssProcessorOptions: {
-						// TODO: verify calc issue fixed. Related: https://github.com/postcss/postcss-calc/issues/50
-						// calc: false,
-						parser: require('postcss-safe-parser'),
-						map: shouldUseSourceMap && {
-							// `inline: false` forces the sourcemap to be output into a
-							// separate file
-							inline: false,
-							// `annotation: true` appends the sourceMappingURL to the end of
-							// the css file, helping the browser find the sourcemap
-							annotation: true,
+				new CSSMinimizerWebpackPlugin({
+					minimizerOptions: {
+						processorOptions: {
+							// TODO: verify calc issue fixed. Related: https://github.com/postcss/postcss-calc/issues/50
+							// calc: false,
+							parser: require('postcss-safe-parser'),
+							map: shouldUseSourceMap && {
+								// `inline: false` forces the sourcemap to be output into a
+								// separate file
+								inline: false,
+								// `annotation: true` appends the sourceMappingURL to the end of
+								// the css file, helping the browser find the sourcemap
+								annotation: true,
+							},
 						},
-					},
-					cssProcessorPluginOptions: {
 						preset: ['default', {minifyFontValues: {removeQuotes: false}}],
 					},
 				}),
