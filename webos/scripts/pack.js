@@ -1,12 +1,12 @@
 /* eslint-env node, es6 */
 const path = require('path');
 const chalk = require('chalk');
-const filesize = require('filesize');
+const { filesize } = require('filesize');
 const fs = require('fs-extra');
 const minimist = require('minimist');
 const formatWebpackMessages = require('react-dev-utils/formatWebpackMessages');
 const printBuildError = require('react-dev-utils/printBuildError');
-const stripAnsi = require('strip-ansi');
+const stripAnsi = require('strip-ansi').default;
 const webpack = require('webpack');
 const {
 	optionParser: app,
