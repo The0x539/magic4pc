@@ -366,13 +366,13 @@ module.exports = function (env) {
 							// https://github.com/facebook/create-react-app/issues/2488
 							ascii_only: true,
 						},
+						sourceMap: shouldUseSourceMap,
+						// Enable file caching
+						nameCache: true,
 					},
 					// Use multi-process parallel running to improve the build speed
 					// Default number of concurrent runs: os.cpus().length - 1
 					parallel: true,
-					// Enable file caching
-					cache: true,
-					sourceMap: shouldUseSourceMap,
 				}),
 				new CSSMinimizerWebpackPlugin({
 					minimizerOptions: {
