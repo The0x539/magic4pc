@@ -11,8 +11,6 @@ const CSSMinimizerWebpackPlugin = require('css-minimizer-webpack-plugin');
 const getCSSModuleLocalIdent = require('react-dev-utils/getCSSModuleLocalIdent');
 const getPublicUrlOrPath = require('react-dev-utils/getPublicUrlOrPath');
 const ModuleNotFoundPlugin = require('react-dev-utils/ModuleNotFoundPlugin');
-const typescriptFormatter = require('react-dev-utils/typescriptFormatter');
-const WatchMissingNodeModulesPlugin = require('react-dev-utils/WatchMissingNodeModulesPlugin');
 const resolve = require('resolve');
 const TerserPlugin = require('terser-webpack-plugin');
 const {DefinePlugin, EnvironmentPlugin} = require('webpack');
@@ -444,11 +442,6 @@ module.exports = function (env) {
 			new ModuleNotFoundPlugin(app.context),
 			// Ensure correct casing in module filepathes
 			new CaseSensitivePathsPlugin(),
-			// If you require a missing module and then `npm install` it, you still have
-			// to restart the development server for Webpack to discover it. This plugin
-			// makes the discovery automatic so you don't have to restart.
-			// See https://github.com/facebookincubator/create-react-app/issues/186
-			!isEnvProduction && new WatchMissingNodeModulesPlugin('./node_modules'),
 			// Switch the internal NodeOutputFilesystem to use graceful-fs to avoid
 			// EMFILE errors when hanndling mass amounts of files at once, such as
 			// what happens when using ilib bundles/resources.
@@ -456,7 +449,11 @@ module.exports = function (env) {
 			// Automatically configure iLib library within @enact/i18n. Additionally,
 			// ensure the locale data files and the resource files are copied during
 			// the build to the output directory.
-			new ILibPlugin({symlinks: false, emit: false}),
+			new ILibPlugin({
+				publicPath: path.resolve('./dist'),
+				symlinks: false,
+				emit: false,
+			}),
 			// Automatically detect ./appinfo.json and ./webos-meta/appinfo.json files,
 			// and parses any to copy over any webOS meta assets at build time.
 			new WebOSMetaPlugin({htmlPlugin: HtmlWebpackPlugin}),
@@ -478,10 +475,6 @@ module.exports = function (env) {
 						'!**/src/setupTests.*',
 					],
 					silent: true,
-					// The formatter is invoked directly in WebpackDevServerUtils during development
-					formatter: !process.env.DISABLE_TSFORMATTER
-						? typescriptFormatter
-						: undefined,
 				}),
 			new ESLintPlugin({
 				// Plugin options
@@ -491,6 +484,7 @@ module.exports = function (env) {
 				// ESLint class options
 				resolvePluginsRelativeTo: __dirname,
 				cache: true,
+				configType: 'eslintrc',
 			}),
 		].filter(Boolean),
 	};
