@@ -87,7 +87,7 @@ module.exports = function (api) {
 			require('@babel/plugin-syntax-dynamic-import').default,
 			[
 				require('@babel/plugin-transform-class-properties').default,
-				{loose: true},
+				{loose: false},
 			],
 			// '@babel/plugin-syntax-import-meta',
 			// '@babel/plugin-proposal-json-strings'

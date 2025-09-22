@@ -483,10 +483,7 @@ module.exports = function (env) {
 				extensions: ['js', 'mjs', 'jsx', 'ts', 'tsx'],
 				formatter: require.resolve('react-dev-utils/eslintFormatter'),
 				eslintPath: require.resolve('eslint'),
-				// ESLint class options
-				resolvePluginsRelativeTo: __dirname,
 				cache: true,
-				configType: 'eslintrc',
 			}),
 		].filter(Boolean),
 	};

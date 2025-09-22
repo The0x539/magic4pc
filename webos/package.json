@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Control your PC with your TV remote",
   "author": "",
-  "main": "src/index.js",
+  "main": "src/index.jsx",
   "scripts": {
     "serve": "node ./scripts/serve.js",
     "build": "node ./scripts/pack.js",
